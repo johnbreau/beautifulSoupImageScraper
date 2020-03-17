@@ -17,6 +17,9 @@ for img in imgs:
     imgUrl = img['src']
     file_name = imgUrl.rsplit('/',1)[1]
     urlString = (imagesPath + file_name)
-    response = requests.get(urlString)
+    response = requests.get(urlString, stream=True)
     if response.status_code == 200:
         print('response', response.status_code)
+        with open(file_name, 'wb') as handle:
+            for block in response.iter_content(1024):
+                handle.write(block)
